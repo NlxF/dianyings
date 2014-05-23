@@ -1,0 +1,53 @@
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{% url 'nj:index' %}">DianYing</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class=""><a href="{% url 'nj:latest' %}">最新电影</a></li>
+                        <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">按评分 <b class="caret"></b></a>
+                              <ul class="dropdown-menu">
+                                <li><a href="{% url 'nj:sort' 'douban'%}">豆瓣</a></li>
+                                <li><a href="{% url 'nj:sort' 'IMDB'%}">IMDB</a></li>
+                              </ul>
+                        </li>
+                        <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">按地区<b class="caret"></b></a>
+                              <ul class="dropdown-menu">
+                                <li><a href="{% url 'nj:zone' 'dalu'%}">大陆电影</a></li>
+                                <li><a href="{% url 'nj:zone' 'gangaotai'%}">港澳台电影</a></li>
+                                <li><a href="{% url 'nj:zone' 'oumei'%}">欧美电影</a></li>
+                                <li><a href="{% url 'nj:zone' 'rihan'%}">日韩电影</a></li>
+                                <li><a href="{% url 'nj:zone' 'qita' %}">其他地区</a></li>
+                              </ul>
+                        </li>
+                    </ul>
+                    {% if user.is_authenticated %}
+                        <div class="navbar-right">
+                            <a href="{% url 'MyUser:setting' %}" class="navbar-text">Hello: {{ user.username }}</a>
+                            <a href="{% url 'MyUser:logout' %}" class="btn btn-warning navbar-btn navbar-right">登出</a>
+                        </div>
+
+                    {% else %}
+                        <a href="{% url 'MyUser:register' %}" class="btn btn-info navbar-btn navbar-right">注册</a>
+                        <form class="navbar-form navbar-right" role="form" action="{% url 'MyUser:login' %}" method="post">
+                        {% csrf_token %}
+                            <div class="form-group">
+                                <input type="text" placeholder="{% firstof error 'User Name'%}" class="form-control" name="username">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" placeholder="Password" class="form-control" name="password">
+                            </div>
+                            <button type="submit" class="btn btn-success">登入</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div><!--end nav container-->
+</nav><!--end nav-->

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<div id="wrap">
+ <div class="container" id="main">
+   <div class="row">
+   <div class="panel panel-default col-md-6 col-md-offset-3">
+    <form class="panel-body" role="form" method="post" action="{% url 'MyUser:register' %}">
+        <h2>注册</h2>
+        {% csrf_token %}
+        <div class="form-group ">
+            <label for="username">用户名</label>
+            <input class="form-control" id="username" name="username" placeholder="只允许字母、数字、下划线" type="text">
+        </div>
+        {{ form.username.errors }}
+        <div class="form-group ">
+            <label for="email">邮箱 </label>
+            <input class="form-control" id="email" name="email" type="email" placeholder="邮箱地址" >
+        </div>
+        {{ form.email.errors }}
+        <div class="form-group ">
+            <label for="password">密码</label>
+            <input class="form-control" id="password1" name="password1" type="password">
+        </div>
+        {{ form.password1.errors }}
+        <div class="form-group ">
+            <label for="password">重复密码</label>
+            <input class="form-control" id="password2" name="password2" type="password">
+        </div>
+        {{ form.password2.errors }}
+        <div class="form-group">
+            <button class="btn btn-default center-block">
+                注册
+            </button>
+        </div>
+    </form>
+   </div>
+   </div>
+ </div>
+</div>
+{% endblock %}

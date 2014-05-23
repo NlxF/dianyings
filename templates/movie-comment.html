@@ -1,0 +1,67 @@
+{% load humanize %}
+
+{% for c in comments %}
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<p class="panel-title">
+			<img title="{{c.username.username}}" class="avatar-middle" src="{{c.username.image}}">
+            {{ c.username.username }}
+            <span class="pull-right">
+                {{ c.data|date:"Y年n月j日 H:i:s" }}| <span class="text-primary">#{{ forloop.counter }}</span>
+            </span>
+		</p>
+	</div>
+	<div class="panel-body">
+        {{ c.text }}
+	</div>
+</div><!--end reply panel-->
+{% empty %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        还没有评论
+    </div>
+    <div class="panel-body">
+		<div class="alert alert-info">
+			还没有评论。
+		</div>
+	</div>
+</div>
+{% endfor %}
+<div class="panel panel-default" id="create_reply">
+	<div class="panel-heading">
+		<p class="panel-title">
+			创建评论
+		</p>
+	</div>
+	<div class="panel-body">
+		{% if messages %}
+		<div class="messages">
+			{% for message in messages %}
+			<p class="text-{{ message.tags }}">
+				{{ message }}
+			</p>
+			{% endfor %}
+		</div>
+		{% endif %}
+		{% if request.user.is_authenticated %}
+            <form class="form" action="{% url 'nj:create_reply' movie.id%}" method="post">
+                {% csrf_token %}
+                <div class="form-group ">
+                    <label class="sr-only" for="content">内容</label>
+                    <textarea class="form-control" id="content" name="content"></textarea>
+                </div>
+                <div class="form-submit text-right">
+                    <button class="btn btn-info" type="submit" id="submit">
+                        回复
+                    </button>
+                </div>
+            </form>
+		{% else %}
+            <div class="alert alert-info">
+                登入后方可回复
+            </div>
+		<a href="{% url 'MyUser:login' %}" class="btn btn-info">登入</a>
+		{% endif %}
+	</div>
+</div><!--end reply panel-->
+

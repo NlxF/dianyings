@@ -1,0 +1,97 @@
+{% load tag_ext %}
+<div class="panel panel-default">
+<div class="panel-body">
+<ul class="media-list">
+    <li class="media">
+        <a href="#" class="avatar-large-large media-object pull-left"><img src="/static/images/{{ movie.image_search }}" class="img-responsive"></a>
+        <div class="media-body">
+            <table class="table table-bordered table-striped table-condensed">
+                <tbody>
+                    <tr>
+                        <td>导演</td>
+                        <td><a href="{% url 'nj:name' movie.director.name %}" class="text-primary">{{ movie.director.name }}</a></td>
+                    </tr>
+                    <tr>
+                        <td>主演</td>
+                        <td>
+                            {% for n in movie.starring.all %}
+                                <a href="{% url 'nj:name' n.name %}" class="text-primary">{{ n.name }}</a> {% if not forloop.last %}/{% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>类型</td>
+                        <td>
+                            {% for tag in movie.tags.all %}
+                                <a href="{% url 'nj:tags' tag.type %}" class="text-primary">{{ tag.type }}</a> {% if not forloop.last %}/{% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>地区</td>
+                        <td><a href="{% url 'nj:zone' movie.zone.zone %}">{{ movie.zone.zone }}</a> </td>
+                    </tr>
+                    <tr>
+                        <td>上映时间</td>
+                        <td>{{ movie.showtime }}</td>
+                    </tr>
+                    <tr>
+                        <td>片长</td>
+                        <td><span class="text-primary">{{ movie.movie_time }}</span></td>
+                    </tr>
+                    <tr>
+                        <td>评分</td>
+                        <td>豆瓣：<span class="text-primary">{{ movie.score1 }}</span> IMDB：<span class="text-primary">{{ movie.score2 }}</span> </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </li>
+</ul>
+</div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h3>剧情简介:</h3>
+        <h5>{{ movie.summary }}</h5>
+        <div class="media media-list">
+            {% for pic in pictures %}
+                <img src="/static/images/{{ pic }}" title="{{ movie.title }}" class="media-body stills">
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{#影片资源#}
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h3>影片资源</h3>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs nav-pills">
+          <li class="active"><a href="#magnetic" data-toggle="tab">磁力链接</a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div class="tab-pane active" id="magnetic">
+              <table class="table table-condensed table-striped">
+                  <tbody>
+                      {% for l in links %}
+                      <tr>
+                          <td>
+                             {{ l.link|sp|cut:'+'|cut:'-' }}  <span class="h6">{{ l.size }}</span>
+                             <div class="form-group pull-right">
+                                <a href="{{ l.link }}" class="btn btn-primary btn-sm glyphicon glyphicon-magnet"></a>
+                             </div>
+                          </td>
+                      </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

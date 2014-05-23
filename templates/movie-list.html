@@ -1,0 +1,58 @@
+{% load humanize %}
+{% load pagination_tags %}
+{% if movies %}
+    {% autopaginate movies 25 %}
+    {% for m in movies %}
+    <div class="panel panel-default">
+        <div class="panel-heading title-breadcrumb">
+            <a href="{% url 'nj:movie' m.0.id %}">[{{m.0.title}}]</a>
+        </div>
+        <div class="panel-body ">
+             <ul class="media-list">
+                 <li class="media">
+                     <a href="{% url 'nj:movie' m.0.id %}" class="pull-left">
+                         <img title="{{ m.0.title }}" class="avatar-large media-object" src="/static/images/{{ m.0.image_search }}">
+                     </a>
+                     <div class="media-body">
+                         <a href="{% url 'nj:movie' m.0.id %}"><h6 class="text-info">{{ m.0.summary|truncatechars:200 }}</h6></a>
+                         <table class="table table-bordered table-condensed">
+                             <tbody>
+                                <tr>
+                                    <td>主演:{% for actor in m.3 %}<span class="text-primary">{{ actor.name }}{% if not forloop.last %}/{% endif %}</span>{% endfor %}</td>
+                                    <td>片长:<span class="text-primary">{{ m.0.movie_time }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>评分 豆瓣:<span class="text-primary">{{ m.0.score1 }}</span>|IMDB:<span class="text-primary">{{ m.0.score2 }}</span></td>
+                                    <td>上映时间: <span class="text-primary">{{ m.0.showtime }}</span></td>
+                                </tr>
+                             </tbody>
+                         </table>
+                     </div>
+                 </li>
+             </ul>
+        </div>
+        <div class="panel-footer">
+            <span class="text-primary">{{ m.0.create_time|date:"Y年n月j日 H:i:s " }}</span> | 归档于 <span class="text-primary">{{ m.2.zone }}</span>电影
+            标签: <span class="text-primary">{% for type in m.1 %}{{ type.type }}{% if not forloop.last %},{% endif %}{% endfor %}</span>
+            <div class="pull-right">
+                <span class="text-primary">{{m.0.click}}</span>次点击|
+                <span class="text-primary">{{m.0.reply_count}}</span>次评论
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+        <div class="panel-footer">
+	{% paginate %}
+</div>
+{% else %}
+     <div class="panel panel-default">
+        <div class="panel-heading title-breadcrumb">
+            抱歉，还没有电影!
+        </div>
+        <div class="panel-body">
+                <div class="alert alert-info">
+                    抱歉，还没有电影!
+                </div>
+        </div>
+    </div>
+{% endif %}

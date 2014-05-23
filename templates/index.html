@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div id="wrap">
+    <div class="container" id="main">
+      <div class="row">
+        <div class="col-md-8" id="left">
+            {% include 'movie-list.html' %}
+        </div><!--end left-->
+        <div class="col-md-4" id="right">
+            {% include 'submit.html' %}
+            {% include 'site-info.html' %}
+        </div><!--end right-->
+      </div><!--end outter row-->
+    </div><!--end main-->
+  </div><!--end wrap-->
+{% endblock %}
