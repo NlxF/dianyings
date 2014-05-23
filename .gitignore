@@ -55,3 +55,5 @@ static/images/full/
 *bak
 .idea
 .svn
+config.yaml
+index.wsgi
