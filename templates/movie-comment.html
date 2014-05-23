@@ -4,7 +4,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<p class="panel-title">
-			<img title="{{c.username.username}}" class="avatar-middle" src="{{c.username.image}}">
+			<img title="{{c.username.username}}" class="avatar-middle" src="/media/{{ c.username.image }}">
             {{ c.username.username }}
             <span class="pull-right">
                 {{ c.data|date:"Y年n月j日 H:i:s" }}| <span class="text-primary">#{{ forloop.counter }}</span>

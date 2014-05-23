@@ -38,13 +38,6 @@ class RegisterForm(forms.Form):
                                     params={'value': 'E-mail has been used'}
         )
 
-    # def clean_password1(self):
-    #     """密码大于6位"""
-    #     password = self.cleaned_data['password1']
-    #     if len(password) <= 6:
-    #         raise forms.ValidationError(_("InvalidValue: %(value)s"),
-    #                                     code=45,
-    #                                     params={'value':_("Password need greater than 6")})
     def clean_password2(self):
         """验证2次密码是否正确"""
         password1 = self.cleaned_data['password1']
@@ -82,12 +75,13 @@ class SettingForm(forms.Form):
         password1 = self.cleaned_data.get('password1', "")
         password2 = self.cleaned_data.get('password2', "")
         if not self.cleaned_data.get('old_password', ''):
-            raise forms.ValidationError(
-                _('InvalidValue: %(value)s'),
-                code=41,
-                params={"value": _('old Passwords need right')}
-            )
-        if password1 and password2 and password1 != password2:
+                raise forms.ValidationError(
+                    _('InvalidValue: %(value)s'),
+                    code=41,
+                    params={"value": _('old Passwords need right')}
+                )
+        else:
+            if password1 and password2 and password1 != password2:
                 raise forms.ValidationError(_('InvalidValue: %(value)s'),
                                         code=41, params={"value": _('Passwords do not match')}
                 )
@@ -102,7 +96,7 @@ class SettingForm(forms.Form):
                 return username
             raise forms.ValidationError(_('InvalidValue: %(value)s'),
                                         code=42,
-                                        params={'value': "Username has been used"}
+                                        params={'value': "Username has been used!!"}
             )
         return username
 

@@ -124,8 +124,8 @@ AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',)
 FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760
 
 # sae的本地文件系统是只读的，修改django的file storage backend为Storage
-DEFAULT_FILE_STORAGE = 'sae.ext.django.storage.backend.Storage'
+#DEFAULT_FILE_STORAGE = 'sae.ext.django.storage.backend.Storage'
 # 使用media这个bucket
-STORAGE_BUCKET_NAME = 'media'
+#STORAGE_BUCKET_NAME = 'media'
 # ref: https://docs.djangoproject.com/en/dev/topics/files/
 

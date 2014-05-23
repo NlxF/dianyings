@@ -37,7 +37,7 @@ class MyUser(AbstractBaseUser):
         max_length=255,
         unique=True
     )
-    image = models.ImageField(upload_to="images/", width_field=50, height_field=50)
+    image = models.ImageField(default='who.png', upload_to="images/")
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 

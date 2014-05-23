@@ -11,6 +11,7 @@ from django.utils.translation import ugettext as _
 from MyUser.forms import RegisterForm, SettingForm
 from MyUser.models import MyUser
 from dianying import conf
+from nanjing.models import weekly_hot, monthly_hot
 
 
 def register(request):
@@ -20,7 +21,7 @@ def register(request):
         if form.is_valid():
             user = MyUser.objects.create_user(email=form.cleaned_data['email'],
                                               username=form.cleaned_data['username'],
-                                              password=form.cleaned_data['password1']
+                                              password=form.cleaned_data['password1'],
             )
             #login site
             user.backend = 'django.contrib.auth.backends.ModelBackend'
@@ -39,11 +40,8 @@ def login(request):
             auth.login(request, user)
             return HttpResponseRedirect(request.META['HTTP_REFERER'])
         else:
-            return render_to_response(
-                'index.html',
-                {"error": _("Login fails, check whether the user name or password error")},
-                context_instance=RequestContext(request)
-                )
+            return HttpResponseRedirect(reverse('nj:index'))
+
     return HttpResponseRedirect(reverse("nj:index"))
 
 
@@ -59,8 +57,9 @@ def setting(request):
             return render_to_response(
                     'user-setting.html',
                     {
-                        "movies_week": conf.hot10_week,
-                        "movies_mouth": conf.hot10_mouth,
+                        "title": "用户设置",
+                        "movies_week": weekly_hot,
+                        "movies_mouth":  monthly_hot,
                         "user": request.user
                     },
                     context_instance=RequestContext(request)
@@ -69,6 +68,7 @@ def setting(request):
             is_success = ""
             form = SettingForm(request.POST, request.FILES)
             form.user = request.user
+
             if form.is_valid():
                 username = form.cleaned_data.get('username', "")
                 if username:
@@ -95,11 +95,12 @@ def setting(request):
             return render_to_response(
                 'user-setting.html',
                 {
-                    "movies_week": conf.hot10_week,
-                    "movies_mouth": conf.hot10_mouth,
+                    "movies_week": weekly_hot,
+                    "movies_mouth":  monthly_hot,
                     "form": form,
                     "user": request.user,
                     "success": is_success,
+                    "title": "用户设置"
                 },
                 context_instance=RequestContext(request)
             )
