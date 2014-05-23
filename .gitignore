@@ -57,3 +57,4 @@ static/images/full/
 .svn
 config.yaml
 index.wsgi
+site-packages
