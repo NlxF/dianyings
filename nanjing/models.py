@@ -151,8 +151,8 @@ class Hot10(models.Model):
         return u"排行榜"
 
 
-weekly_hot = None
-monthly_hot = None
+# weekly_hot = None
+# monthly_hot = None
 
 
 from apscheduler.scheduler import Scheduler
@@ -168,9 +168,9 @@ __configure = {
 scheduler = Scheduler()
 
 
-@scheduler.cron_schedule(second='1', minute='12', hour='2-3', day_of_week='0-6', misfire_grace_time='61')
+@scheduler.cron_schedule(second='1', minute='14', hour='11-12', day_of_week='0-6')
 def updatehot10everynanjing():
-    """更新排行榜"""
+    """更新排行榜 在2:12:1"""
     import datetime
     today = datetime.date.today()
     movies = Hot10.objects.all()
@@ -188,9 +188,9 @@ def updatehot10everynanjing():
         m.month = sum(int(x) for x in monthly_click)
         m.today = 0
         m.save()
-    global weekly_hot
-    global monthly_hot
-    weekly_hot = Hot10.hot10_objects.get_week_hot()
-    monthly_hot = Hot10.hot10_objects.get_month_hot()
+    # global weekly_hot
+    # global monthly_hot
+    # weekly_hot = Hot10.hot10_objects.get_week_hot()
+    # monthly_hot = Hot10.hot10_objects.get_month_hot()
 
 scheduler.start()

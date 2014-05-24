@@ -11,7 +11,7 @@ from django.utils.translation import ugettext as _
 from MyUser.forms import RegisterForm, SettingForm
 from MyUser.models import MyUser
 from dianying import conf
-from nanjing.models import weekly_hot, monthly_hot
+from nanjing.models import Hot10
 
 
 def register(request):
@@ -58,8 +58,8 @@ def setting(request):
                     'user-setting.html',
                     {
                         "title": "用户设置",
-                        "movies_week": weekly_hot,
-                        "movies_mouth":  monthly_hot,
+                        "movies_week":  Hot10.hot10_objects.get_week_hot(),
+                        "movies_month": Hot10.hot10_objects.get_month_hot(),
                         "user": request.user
                     },
                     context_instance=RequestContext(request)
@@ -95,8 +95,8 @@ def setting(request):
             return render_to_response(
                 'user-setting.html',
                 {
-                    "movies_week": weekly_hot,
-                    "movies_mouth":  monthly_hot,
+                    "movies_week":  Hot10.hot10_objects.get_week_hot(),
+                    "movies_month": Hot10.hot10_objects.get_month_hot(),
                     "form": form,
                     "user": request.user,
                     "success": is_success,

@@ -5,7 +5,7 @@ from django.template import RequestContext
 from django.http.response import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from nanjing.models import Nanjing, Comment, Hot10, weekly_hot, monthly_hot
+from nanjing.models import Nanjing, Comment, Hot10
 import datetime
 # import sys
 # reload(sys)
@@ -25,8 +25,8 @@ def index(request):
             "title": "首页",
             "movies": movie_list,
             "user": request.user,
-            'movies_week': weekly_hot if weekly_hot else Hot10.hot10_objects.get_week_hot(),
-            'movies_month': monthly_hot if monthly_hot else Hot10.hot10_objects.get_month_hot(),
+            'movies_week':  Hot10.hot10_objects.get_week_hot(),
+            'movies_month': Hot10.hot10_objects.get_month_hot(),
         },
         context_instance=RequestContext(request)
     )
@@ -44,8 +44,8 @@ def latest(request):
         'title': "最新电影",
         'movies': movie_list,
         'user': request.user,
-        'movies_week': weekly_hot if weekly_hot else Hot10.hot10_objects.get_week_hot(),
-        'movies_month': monthly_hot if monthly_hot else Hot10.hot10_objects.get_month_hot(),
+        'movies_week':  Hot10.hot10_objects.get_week_hot(),
+        'movies_month': Hot10.hot10_objects.get_month_hot(),
         },
         context_instance=RequestContext(request)
     )

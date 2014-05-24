@@ -74,17 +74,17 @@ class SettingForm(forms.Form):
         """验证2次密码是否正确"""
         password1 = self.cleaned_data.get('password1', "")
         password2 = self.cleaned_data.get('password2', "")
-        if not self.cleaned_data.get('old_password', ''):
-                raise forms.ValidationError(
-                    _('InvalidValue: %(value)s'),
-                    code=41,
-                    params={"value": _('old Passwords need right')}
-                )
-        else:
-            if password1 and password2 and password1 != password2:
-                raise forms.ValidationError(_('InvalidValue: %(value)s'),
-                                        code=41, params={"value": _('Passwords do not match')}
-                )
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError(
+                _('InvalidValue: %(value)s'),
+                code=41, params={"value": _('Passwords do not match')}
+            )
+        elif password1 and password2 and not self.cleaned_data.get('old_password', ''):
+            raise forms.ValidationError(
+                _('InvalidValue: %(value)s'),
+                code=41,
+                params={"value": _('old Passwords need right')}
+            )
         return password2
 
     def clean_username(self):
