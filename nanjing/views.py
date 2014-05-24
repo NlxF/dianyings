@@ -5,7 +5,6 @@ from django.template import RequestContext
 from django.http.response import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from dianying import conf
 from nanjing.models import Nanjing, Comment, Hot10, weekly_hot, monthly_hot
 import datetime
 # import sys
@@ -16,6 +15,7 @@ import datetime
 def index(request):
     """首页"""
     movie_list = []
+
     movies = Nanjing.objects.all()
     for m in movies:
         movie_list.append([m, m.tags.all(), m.zone, m.starring.all()])
@@ -232,5 +232,3 @@ def create_reply(request, movie_id_):
         movie.movie_comment.add(new_comment)
         movie.save()
         return HttpResponseRedirect(reverse("nj:movie", args=(movie.id,)))
-
-        #context_instance=RequestContext(request)

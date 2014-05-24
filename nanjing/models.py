@@ -155,6 +155,20 @@ weekly_hot = None
 monthly_hot = None
 
 
+from apscheduler.scheduler import Scheduler
+import logging
+logging.basicConfig()
+__MYSQL_url = 'mysql://root:toor@localhost/w'
+__configure = {
+    'apscheduler.standalone':True,
+    'apscheduler.jobstores.sqlalchemy_store.class': 'apscheduler.jobstores.sqlalchemy_store:SQLAlchemyJobStore',
+    'apscheduler.jobstores.sqlalchemy_store.url': __MYSQL_url
+}
+
+scheduler = Scheduler()
+
+
+@scheduler.cron_schedule(second='1', minute='12', hour='2-3', day_of_week='0-6', misfire_grace_time='61')
 def updatehot10everynanjing():
     """更新排行榜"""
     import datetime
@@ -178,3 +192,5 @@ def updatehot10everynanjing():
     global monthly_hot
     weekly_hot = Hot10.hot10_objects.get_week_hot()
     monthly_hot = Hot10.hot10_objects.get_month_hot()
+
+scheduler.start()

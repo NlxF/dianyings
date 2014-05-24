@@ -42,7 +42,6 @@ INSTALLED_APPS = (
     'MyUser',
     'nanjing',
     'pagination',
-    'django_cron',
 )
 
 TEMPLATE_DIRS = (
