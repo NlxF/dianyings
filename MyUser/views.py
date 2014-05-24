@@ -90,16 +90,16 @@ def setting(request):
                 elif f:
                     is_success = "—头像更新失败"
                 request.user.save()
-                #return HttpResponseRedirect(reverse("nj:index"))
+                #return HttpResponseRedirect(reverse("MyUser:setting"))
             return render_to_response(
                 'user-setting.html',
                 {
+                    "title": "用户设置",
+                    "form": form,
+                    "success": is_success,
+                    "user": request.user,
                     "movies_week":  Hot10.hot10_objects.get_week_hot(),
                     "movies_month": Hot10.hot10_objects.get_month_hot(),
-                    "form": form,
-                    "user": request.user,
-                    "success": is_success,
-                    "title": "用户设置"
                 },
                 context_instance=RequestContext(request)
             )
