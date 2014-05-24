@@ -9,15 +9,15 @@ from MyUser.models import MyUser
 class RegisterForm(forms.Form):
     username = forms.CharField(max_length=25)
     email = forms.EmailField(min_length=6)
-    password1 = forms.CharField(widget=forms.PasswordInput, min_length=6)
-    password2 = forms.CharField(widget=forms.PasswordInput, min_length=6)
+    password1 = forms.CharField(widget=forms.PasswordInput, min_length=4)
+    password2 = forms.CharField(widget=forms.PasswordInput, min_length=4)
 
     def clean_username(self):
         """验证username是否重复、格式是否正确"""
         if not self.cleaned_data['username'].replace('_', '').isalnum():
             raise forms.ValidationError(_('InvalidValue: %(value)s'),
                                         code=44,
-                                        params={'value': _('Username wrong format')})
+                                        params={'value': _('Username is wrong format')})
         username = MyUser.objects.filter(username=self.cleaned_data['username'])
         if not username:
             return self.cleaned_data['username']

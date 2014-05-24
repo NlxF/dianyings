@@ -82,14 +82,13 @@ def setting(request):
                     password = form.cleaned_data.get('password1', "")
                     if password:
                         request.user.set_password(password)
-                try:
-                    f = request.FILES['file']
-                    if f:
-                        #conf.handle_uploaded_file(f)
-                        request.user.image = f
-                except:
-                    pass
-                is_success = "修改成功"
+
+                is_success = "—修改成功"
+                f = request.FILES.get('file', '')
+                if f and f.size < 512000 and f.name.split('.')[-1] in ['png', 'jpg', 'gif']:
+                    request.user.image = f
+                elif f:
+                    is_success = "—头像更新失败"
                 request.user.save()
                 #return HttpResponseRedirect(reverse("nj:index"))
             return render_to_response(
