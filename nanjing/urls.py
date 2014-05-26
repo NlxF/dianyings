@@ -4,6 +4,7 @@ __author__ = 'ISM'
 from django.conf.urls import url, patterns, include
 
 urlpatterns = patterns('nanjing.views',
+
     url(r'^index/$', 'index'),
     url(r'^latest/$', "latest", name='latest'),
     url(r'^sort/(?P<movie_type>\w{4,6})/$', 'sort_by', name='sort'),

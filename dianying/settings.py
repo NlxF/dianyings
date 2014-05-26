@@ -45,7 +45,7 @@ INSTALLED_APPS = (
 )
 
 TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, "templates"),
+    os.path.join(BASE_DIR, "template"),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
