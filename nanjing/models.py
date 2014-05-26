@@ -155,42 +155,42 @@ class Hot10(models.Model):
 # monthly_hot = None
 
 
-from apscheduler.scheduler import Scheduler
-import logging
-logging.basicConfig()
-__MYSQL_url = 'mysql://root:toor@localhost/w'
-__configure = {
-    'apscheduler.standalone':True,
-    'apscheduler.jobstores.sqlalchemy_store.class': 'apscheduler.jobstores.sqlalchemy_store:SQLAlchemyJobStore',
-    'apscheduler.jobstores.sqlalchemy_store.url': __MYSQL_url
-}
+# from apscheduler.scheduler import Scheduler
+# import logging
+# logging.basicConfig()
+# __MYSQL_url = 'mysql://root:toor@localhost/w'
+# __configure = {
+#     'apscheduler.standalone':True,
+#     'apscheduler.jobstores.sqlalchemy_store.class': 'apscheduler.jobstores.sqlalchemy_store:SQLAlchemyJobStore',
+#     'apscheduler.jobstores.sqlalchemy_store.url': __MYSQL_url
+# }
+#
+# scheduler = Scheduler()
 
-scheduler = Scheduler()
 
-
-@scheduler.cron_schedule(second='1', minute='14', hour='11-12', day_of_week='0-6')
-def updatehot10everynanjing():
-    """更新排行榜 在2:12:1"""
-    import datetime
-    today = datetime.date.today()
-    movies = Hot10.objects.all()
-    for m in movies:
-        """index1是每周排行榜，index2是每月排行榜"""
-        index1 = abs((today-m.creation).days) % 7
-        index2 = abs((today-m.creation).days) % 30
-        weekly_click = m.weekly_click.split(',')
-        monthly_click = m.monthly_click.split(',')
-        weekly_click[index1-1] = str(m.today)
-        monthly_click[index2-1] = str(m.today)
-        m.weekly_click = ','.join(weekly_click)
-        m.monthly_click = ','.join(monthly_click)
-        m.week = sum(int(x) for x in weekly_click)
-        m.month = sum(int(x) for x in monthly_click)
-        m.today = 0
-        m.save()
+#@scheduler.cron_schedule(second='1', minute='12', hour='2-3', day_of_week='0-6')
+# def updatehot10everynanjing():
+#     """更新排行榜 在2:12:1"""
+#     import datetime
+#     today = datetime.date.today()
+#     movies = Hot10.objects.all()
+#     for m in movies:
+#         """index1是每周排行榜，index2是每月排行榜"""
+#         index1 = abs((today-m.creation).days) % 7
+#         index2 = abs((today-m.creation).days) % 30
+#         weekly_click = m.weekly_click.split(',')
+#         monthly_click = m.monthly_click.split(',')
+#         weekly_click[index1-1] = str(m.today)
+#         monthly_click[index2-1] = str(m.today)
+#         m.weekly_click = ','.join(weekly_click)
+#         m.monthly_click = ','.join(monthly_click)
+#         m.week = sum(int(x) for x in weekly_click)
+#         m.month = sum(int(x) for x in monthly_click)
+#         m.today = 0
+#         m.save()
     # global weekly_hot
     # global monthly_hot
     # weekly_hot = Hot10.hot10_objects.get_week_hot()
     # monthly_hot = Hot10.hot10_objects.get_month_hot()
 
-scheduler.start()
+#scheduler.start()

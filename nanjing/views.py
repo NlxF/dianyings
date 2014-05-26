@@ -2,10 +2,11 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.http.response import HttpResponseRedirect
+from django.http.response import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from nanjing.models import Nanjing, Comment, Hot10
+from dianying.conf import hot10_week, hot10_month
 import datetime
 # import sys
 # reload(sys)
@@ -15,7 +16,6 @@ import datetime
 def index(request):
     """首页"""
     movie_list = []
-
     movies = Nanjing.objects.all()
     for m in movies:
         movie_list.append([m, m.tags.all(), m.zone, m.starring.all()])
@@ -25,8 +25,8 @@ def index(request):
             "title": "首页",
             "movies": movie_list,
             "user": request.user,
-            'movies_week':  Hot10.hot10_objects.get_week_hot(),
-            'movies_month': Hot10.hot10_objects.get_month_hot(),
+            'movies_week':  hot10_week,
+            'movies_month': hot10_month,
         },
         context_instance=RequestContext(request)
     )
@@ -41,11 +41,11 @@ def latest(request):
     return render_to_response(
         "index.html",
         {
-        'title': "最新电影",
-        'movies': movie_list,
-        'user': request.user,
-        'movies_week':  Hot10.hot10_objects.get_week_hot(),
-        'movies_month': Hot10.hot10_objects.get_month_hot(),
+            'title': "最新电影",
+            'movies': movie_list,
+            'user': request.user,
+            'movies_week':  hot10_week,
+            'movies_month': hot10_month,
         },
         context_instance=RequestContext(request)
     )
@@ -65,11 +65,11 @@ def sort_by(request, movie_type):
     return render_to_response(
         "index.html",
         {
-        'title': title,
-        'movies': movie_list,
-        'user': request.user,
-        'movies_week': Hot10.hot10_objects.get_week_hot(),
-        'movies_month': Hot10.hot10_objects.get_month_hot(),
+            'title': title,
+            'movies': movie_list,
+            'user': request.user,
+            'movies_week': hot10_week,
+            'movies_month': hot10_month,
         },
         context_instance=RequestContext(request)
     )
@@ -106,11 +106,11 @@ def zone(request, movie_zone):
     return render_to_response(
         "index.html",
         {
-        'title': title,
-        'movies': movie_list,
-        'user': request.user,
-        'movies_week': Hot10.hot10_objects.get_week_hot(),
-        'movies_month': Hot10.hot10_objects.get_month_hot(),
+            'title': title,
+            'movies': movie_list,
+            'user': request.user,
+            'movies_week': hot10_week,
+            'movies_month': hot10_month,
         },
         context_instance=RequestContext(request)
     )
@@ -130,11 +130,11 @@ def movie_tag(request, tag):
     return render_to_response(
         "index.html",
         {
-        'title': title,
-        'movies': movie_list,
-        'user': request.user,
-        'movies_week': Hot10.hot10_objects.get_week_hot(),
-        'movies_month': Hot10.hot10_objects.get_month_hot(),
+            'title': title,
+            'movies': movie_list,
+            'user': request.user,
+            'movies_week': hot10_week,
+            'movies_month': hot10_month,
         },
         context_instance=RequestContext(request)
     )
@@ -165,11 +165,11 @@ def by_name(request, name):
     return render_to_response(
         "index.html",
         {
-        'title': title,
-        'movies': movie_list,
-        'user': request.user,
-        'movies_week': Hot10.hot10_objects.get_week_hot(),
-        'movies_month': Hot10.hot10_objects.get_month_hot(),
+            'title': title,
+            'movies': movie_list,
+            'user': request.user,
+            'movies_week':  hot10_week,
+            'movies_month': hot10_month,
         },
         context_instance=RequestContext(request)
     )
@@ -200,8 +200,8 @@ def movie_id(request, movie_id_):
                 'pictures': pic,
                 'links': download_links,
                 'comments': comments,
-                'movies_week': Hot10.hot10_objects.get_week_hot(),
-                'movies_month': Hot10.hot10_objects.get_month_hot(),
+                'movies_week': hot10_week,
+                'movies_month': hot10_month,
             },
             context_instance=RequestContext(request)
         )
@@ -232,3 +232,25 @@ def create_reply(request, movie_id_):
         movie.movie_comment.add(new_comment)
         movie.save()
         return HttpResponseRedirect(reverse("nj:movie", args=(movie.id,)))
+
+
+def updatehot10everynanjing(request):
+    """更新排行榜 在2:12:1"""
+    import datetime
+    today = datetime.date.today()
+    movies = Hot10.objects.all()
+    for m in movies:
+        """index1是每周排行榜，index2是每月排行榜"""
+        index1 = abs((today-m.creation).days) % 7
+        index2 = abs((today-m.creation).days) % 30
+        weekly_click = m.weekly_click.split(',')
+        monthly_click = m.monthly_click.split(',')
+        weekly_click[index1-1] = str(m.today)
+        monthly_click[index2-1] = str(m.today)
+        m.weekly_click = ','.join(weekly_click)
+        m.monthly_click = ','.join(monthly_click)
+        m.week = sum(int(x) for x in weekly_click)
+        m.month = sum(int(x) for x in monthly_click)
+        m.today = 0
+        m.save()
+        return HttpResponse("ok")

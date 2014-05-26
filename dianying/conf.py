@@ -7,8 +7,8 @@ from nanjing.models import Nanjing, Hot10
 # movies = Nanjing.objects.all()
 # movie_count = movies.count()
 # user_count = MyUser.objects.count()
-# hot10_week = Hot10.hot10_objects.get_week_hot()
-# hot10_mouth = Hot10.hot10_objects.get_mouth_hot()
+hot10_week = Hot10.hot10_objects.get_week_hot()
+hot10_month = Hot10.hot10_objects.get_month_hot()
 
 
 def handle_uploaded_file(f):

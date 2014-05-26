@@ -55,14 +55,14 @@ def setting(request):
         #必须是登入用户
         if request.method == 'GET':
             return render_to_response(
-                    'user-setting.html',
-                    {
-                        "title": "用户设置",
-                        "movies_week":  Hot10.hot10_objects.get_week_hot(),
-                        "movies_month": Hot10.hot10_objects.get_month_hot(),
-                        "user": request.user
-                    },
-                    context_instance=RequestContext(request)
+                'user-setting.html',
+                {
+                    "title": "用户设置",
+                    "movies_week":  conf.hot10_week,
+                    "movies_month": conf.hot10_month,
+                    "user": request.user
+                },
+                context_instance=RequestContext(request)
             )
         else:
             is_success = ""
@@ -98,8 +98,8 @@ def setting(request):
                     "form": form,
                     "success": is_success,
                     "user": request.user,
-                    "movies_week":  Hot10.hot10_objects.get_week_hot(),
-                    "movies_month": Hot10.hot10_objects.get_month_hot(),
+                    "movies_week":  conf.hot10_week,
+                    "movies_month": conf.hot10_month,
                 },
                 context_instance=RequestContext(request)
             )
