@@ -8,7 +8,7 @@ from django.contrib import auth
 from django.contrib.auth.views import password_reset, password_reset_confirm
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
-from MyUser.forms import RegisterForm, SettingForm
+from MyUser.forms import RegisterForm, SettingForm, LoginForm
 from MyUser.models import MyUser
 from dianying import conf
 from nanjing.models import Hot10
@@ -31,17 +31,27 @@ def register(request):
     return render_to_response('register.html', context_instance=RequestContext(request))
 
 
+HTTP_REFERER = ''
+
+
 def login(request):
     if request.method == "POST":
-        username = request.POST.get('username', '')
-        password = request.POST.get('password', '')
-        user = auth.authenticate(username=username, password=password)
-        if user is not None and user.is_active:
-            auth.login(request, user)
-            return HttpResponseRedirect(request.META['HTTP_REFERER'])
-        else:
-            return HttpResponseRedirect(reverse('nj:index'))
-
+        #username = request.POST.get('username', '')
+        #password = request.POST.get('password', '')
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            user = auth.authenticate(username=form.cleaned_data['username'],
+                                     password=form.cleaned_data['password'])
+            if user is not None and user.is_active:
+                auth.login(request, user)
+                return HttpResponseRedirect(HTTP_REFERER)
+            else:
+                return render(request, 'login.html', {'form': form})
+    elif request.method == 'GET':
+        form = LoginForm()
+        global HTTP_REFERER
+        HTTP_REFERER = request.META['HTTP_REFERER']
+        return render(request, 'login.html', {'form': form})
     return HttpResponseRedirect(reverse("nj:index"))
 
 
@@ -85,8 +95,10 @@ def setting(request):
 
                 is_success = "—修改成功"
                 f = request.FILES.get('file', '')
-                if f and f.size < 512000 and f.name.split('.')[-1] in ['png', 'jpg', 'gif']:
-                    request.user.image = f
+                suffix = f.name.split('.')[-1]
+                if f and f.size < 512000 and suffix in ['png', 'jpg', 'gif']:
+                    request.user.image.delete(request.user.username+'.'+suffix)
+                    request.user.image.save(request.user.username+'.'+suffix, f)
                 elif f:
                     is_success = "—头像更新失败"
                 request.user.save()
@@ -115,7 +127,8 @@ def reset_confirm(request, uidb64=None, token=None):
 def reset_password(request):
     """通过邮箱重设密码"""
     return password_reset(
-        request, template_name='reset-password.html',
+        request,
+        template_name='reset-password.html',
         email_template_name='reset-password-email.html',
         subject_template_name='reset-password-subject.txt',
         post_reset_redirect=reverse('MyUser:login')

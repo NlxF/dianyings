@@ -240,18 +240,19 @@ def updatehot10everynanjing(request):
     today = datetime.date.today()
     movies = Hot10.objects.all()
     for m in movies:
-        """index1是每周排行榜，index2是每月排行榜"""
-        index1 = abs((today-m.creation).days) % 7
-        index2 = abs((today-m.creation).days) % 30
-        weekly_click = m.weekly_click.split(',')
-        monthly_click = m.monthly_click.split(',')
-        weekly_click[index1-1] = str(m.today)
-        monthly_click[index2-1] = str(m.today)
-        m.weekly_click = ','.join(weekly_click)
-        m.monthly_click = ','.join(monthly_click)
-        m.week = sum(int(x) for x in weekly_click)
-        m.month = sum(int(x) for x in monthly_click)
-        m.today = 0
-        m.save()
+        if m.today >= 0:
+            """index1是每周排行榜，index2是每月排行榜"""
+            index1 = abs((today-m.creation).days) % 7
+            index2 = abs((today-m.creation).days) % 30
+            weekly_click = m.weekly_click.split(',')
+            monthly_click = m.monthly_click.split(',')
+            weekly_click[index1-1] = str(m.today)
+            monthly_click[index2-1] = str(m.today)
+            m.weekly_click = ','.join(weekly_click)
+            m.monthly_click = ','.join(monthly_click)
+            m.week = sum(int(x) for x in weekly_click)
+            m.month = sum(int(x) for x in monthly_click)
+            m.today = 0
+            m.save()
     reload(conf)
-    return HttpResponse("ok")
+    return HttpResponse(status=200)

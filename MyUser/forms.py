@@ -49,6 +49,19 @@ class RegisterForm(forms.Form):
         return password2
 
 
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=25)
+    password = forms.CharField(widget=forms.PasswordInput, min_length=4)
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if not self.cleaned_data['username'].replace('_', '').isalnum():
+            raise forms.ValidationError(_('InvalidValue: %(value)s'),
+                                        code=44,
+                                        params={'value': _('Username is wrong format')})
+        return username
+
+
 class SettingForm(forms.Form):
     username = forms.CharField(required=False)
     email = forms.EmailField(required=False)

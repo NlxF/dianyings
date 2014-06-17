@@ -34,19 +34,9 @@
                             <a href="{% url 'MyUser:setting' %}" class="navbar-text">Hello: {{ user.username }}</a>
                             <a href="{% url 'MyUser:logout' %}" class="btn btn-warning navbar-btn navbar-right">登出</a>
                         </div>
-
                     {% else %}
                         <a href="{% url 'MyUser:register' %}" class="btn btn-info navbar-btn navbar-right">注册</a>
-                        <form class="navbar-form navbar-right" role="form" action="{% url 'MyUser:login' %}" method="post">
-                        {% csrf_token %}
-                            <div class="form-group">
-                                <input type="text" placeholder="{% firstof error 'User Name'%}" class="form-control" name="username">
-                            </div>
-                            <div class="form-group">
-                                <input type="password" placeholder="Password" class="form-control" name="password">
-                            </div>
-                            <button type="submit" class="btn btn-success">登入</button>
-                        </form>
+                        <a href="{% url 'MyUser:login' %}" class="btn btn-success navbar-btn navbar-right">登入</a>
                     {% endif %}
                 </div>
             </div><!--end nav container-->

@@ -1,26 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="panel panel-default col-md-6 col-md-offset-3">
-    <form class="panel-body" role="form" method="post" action="{% url 'signin' %}">
-        <h2>登陆</h2>
-        {% csrf_token %}
-        <div class="form-group ">
-            <label for="username">用户名</label>
-            <input class="form-control" id="username" name="username" placeholder="" type="text">
+<div id="wrap">
+    <div class="container" id="main">
+        <div class="panel panel-default col-md-6 col-md-offset-3">
+        <form class="panel-body" role="form" method="post" action="{% url 'MyUser:login' %}">
+            <h2>登陆</h2>
+            {% csrf_token %}
+            <div class="form-group ">
+                <label for="username">用户名</label>
+                <input class="form-control" id="username" name="username" placeholder="UserName" type="text">
+            </div>
+            {{ form.username.errors }}
+            <div class="form-group ">
+                <label for="password">密码</label>
+                <input class="form-control" id="password" name="password" type="password">
+            </div>
+            {{ form.username.errors }}
+            <div class="form-group">
+                <button class="btn btn-default">
+                    登陆
+                </button>
+                <a class="btn btn-link" href="{% url 'MyUser:register' %}">注册？</a>
+{#                <a class="btn btn-link" href="{% url 'MyUser:reset_password' %}">找回密码？</a>#}
+            </div>
+        </form>
         </div>
-        {{ form.username.errors }}
-        <div class="form-group ">
-            <label for="password">密码</label>
-            <input class="form-control" id="password" name="password" type="password">
-        </div>
-        {{ form.username.errors }}
-        <div class="form-group">
-            <button class="btn btn-default">
-                登陆
-            </button>
-            <a class="btn btn-link" href="{% url 'reg' %}">注册？</a>
-            <a class="btn btn-link" href="{% url 'password_reset' %}">找回密码？</a>
-        </div>
-    </form>
+    </div>
 </div>
+
 {% endblock %}
