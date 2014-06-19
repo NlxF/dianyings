@@ -119,6 +119,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media").replace('\\', '/')
 
 MAX_UPLOAD_SIZE = "2560"
 
+CONN_MAX_AGE = 10
 
 #自定义用户模型
 AUTH_USER_MODEL = 'MyUser.MyUser'

@@ -35,8 +35,8 @@
                             <a href="{% url 'MyUser:logout' %}" class="btn btn-warning navbar-btn navbar-right">登出</a>
                         </div>
                     {% else %}
-                        <a href="{% url 'MyUser:register' %}" class="btn btn-info navbar-btn navbar-right">注册</a>
-                        <a href="{% url 'MyUser:login' %}" class="btn btn-success navbar-btn navbar-right">登入</a>
+                        <a href="{% url 'MyUser:register' %}" class="navbar-text navbar-right">注册</a>
+                        <a href="{% url 'MyUser:login' %}" class="navbar-text navbar-right">登入</a>
                     {% endif %}
                 </div>
             </div><!--end nav container-->
